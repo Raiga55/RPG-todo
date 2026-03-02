@@ -46,6 +46,11 @@ export default function App() {
     setTodos((prev) => prev.filter((t) => t.id !== id))
   }
 
+  const handleReset = () => {
+    if (!window.confirm('レベルとXPをリセットしますか？')) return
+    setTotalXp(0)
+  }
+
   // TODO: 確認後に削除する
   const handleDebugLevelUp = () => {
     const { level, xpInCurrentLevel } = calcLevel(totalXp)
@@ -65,11 +70,12 @@ export default function App() {
       </header>
 
       <Hero level={calcLevel(totalXp).level} />
-      <PlayerStatus totalXp={totalXp} />
+      <PlayerStatus totalXp={totalXp} onReset={handleReset} />
 
       {levelUpMsg && (
         <div className="levelup-toast" role="alert">
-          🎉 {levelUpMsg}
+          <img src="/levelup.png" alt="Level Up!" className="levelup-img" />
+          <div className="levelup-text">🎉 {levelUpMsg}</div>
         </div>
       )}
 

@@ -92,6 +92,18 @@ body {
 
 .xp-label { font-size: .75rem; color: var(--muted); white-space: nowrap; }
 
+.reset-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+}
+.reset-btn:hover { color: var(--red); border-color: var(--red); }
+
 /* ── Debug ── */
 .debug-levelup-btn {
   display: block;
@@ -332,6 +344,19 @@ body {
   margin-bottom: 20px;
   animation: fadeInOut 3s ease forwards;
   box-shadow: 0 0 16px var(--gold-dim);
+}
+
+.levelup-img {
+  display: block;
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: calc(var(--radius) - 2px);
+  margin-bottom: 10px;
+}
+
+.levelup-text {
+  font-size: 1.1rem;
 }
 
 @keyframes fadeInOut {

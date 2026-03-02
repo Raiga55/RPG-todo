@@ -3,7 +3,7 @@ import { calcLevel, xpToNextLevel } from '../utils/rpg'
 const RANK_LABELS = ['E', 'D', 'C', 'B', 'A', 'S', 'SS', 'SSS']
 const rank = (level) => RANK_LABELS[Math.min(level - 1, RANK_LABELS.length - 1)]
 
-export const PlayerStatus = ({ totalXp }) => {
+export const PlayerStatus = ({ totalXp, onReset }) => {
   const { level, xpInCurrentLevel } = calcLevel(totalXp)
   const needed = xpToNextLevel(level)
   const pct = Math.min((xpInCurrentLevel / needed) * 100, 100)
@@ -14,6 +14,7 @@ export const PlayerStatus = ({ totalXp }) => {
         <span className="rank-badge">Rank {rank(level)}</span>
         <h2 className="level-text">Lv. {level}</h2>
         <span className="total-xp">{totalXp} XP total</span>
+        <button className="reset-btn" onClick={onReset} title="レベルリセット">↺</button>
       </div>
       <div className="xp-bar-wrapper">
         <div className="xp-bar-track">
