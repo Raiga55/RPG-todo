@@ -4,7 +4,7 @@ import { PlayerStatus } from './components/PlayerStatus'
 import { Hero } from './components/Hero'
 import { TodoForm } from './components/TodoForm'
 import { TodoList } from './components/TodoList'
-import { XP_REWARD, calcLevel } from './utils/rpg'
+import { XP_REWARD, calcLevel, xpToNextLevel } from './utils/rpg'
 import './App.css'
 
 const createTodo = (text, difficulty) => ({
@@ -46,6 +46,17 @@ export default function App() {
     setTodos((prev) => prev.filter((t) => t.id !== id))
   }
 
+  // TODO: 確認後に削除する
+  const handleDebugLevelUp = () => {
+    const { level, xpInCurrentLevel } = calcLevel(totalXp)
+    const xpToAdd = xpToNextLevel(level) - xpInCurrentLevel
+    const newTotal = totalXp + xpToAdd
+    const newLevel = calcLevel(newTotal).level
+    setTotalXp(newTotal)
+    setLevelUpMsg(`Level Up! Lv. ${newLevel} に到達！`)
+    setTimeout(() => setLevelUpMsg(null), 3000)
+  }
+
   return (
     <div className="app">
       <header className="app-header">
@@ -61,6 +72,11 @@ export default function App() {
           🎉 {levelUpMsg}
         </div>
       )}
+
+      {/* TODO: 確認後に削除する */}
+      <button className="debug-levelup-btn" onClick={handleDebugLevelUp}>
+        [DEBUG] レベルアップ
+      </button>
 
       <TodoForm onAdd={handleAdd} />
       <TodoList todos={todos} onComplete={handleComplete} onDelete={handleDelete} />

@@ -92,6 +92,21 @@ body {
 
 .xp-label { font-size: .75rem; color: var(--muted); white-space: nowrap; }
 
+/* ── Debug ── */
+.debug-levelup-btn {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 1px dashed #444;
+  color: #555;
+  border-radius: var(--radius);
+  font-size: .8rem;
+  padding: 6px;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.debug-levelup-btn:hover { border-color: #777; color: #999; }
+
 /* ── Todo Form ── */
 .todo-form {
   display: flex;
