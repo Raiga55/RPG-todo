@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLocalStorage } from './hooks/useLocalStorage'
 import { PlayerStatus } from './components/PlayerStatus'
+import { Hero } from './components/Hero'
 import { TodoForm } from './components/TodoForm'
 import { TodoList } from './components/TodoList'
 import { XP_REWARD, calcLevel } from './utils/rpg'
@@ -52,6 +53,7 @@ export default function App() {
         <p className="app-subtitle">クエストを完了して冒険者を育てよう</p>
       </header>
 
+      <Hero level={calcLevel(totalXp).level} />
       <PlayerStatus totalXp={totalXp} />
 
       {levelUpMsg && (
