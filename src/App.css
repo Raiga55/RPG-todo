@@ -254,16 +254,21 @@ body {
 
 .hero-art-wrap {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  justify-content: center;
   margin-bottom: 10px;
 }
 
 .hero-art {
-  font-size: 6rem;
   display: block;
-  line-height: 1;
+  width: 128px;
+  height: 128px;
+  background-image: url('/hero.png');
+  background-size: 400% auto;   /* 4枚横並び */
+  background-repeat: no-repeat;
+  image-rendering: pixelated;   /* ドット絵をくっきり表示 */
   filter: drop-shadow(0 0 14px rgba(240, 192, 64, 0.3));
-  transition: filter 0.3s;
+  transition: background-position 0.1s;
 }
 
 .hero-evolving .hero-art {
