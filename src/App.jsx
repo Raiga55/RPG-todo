@@ -9,6 +9,7 @@ import { AchievementsPanel } from './components/AchievementsPanel'
 import { XP_REWARD, calcLevel, xpToNextLevel } from './utils/rpg'
 import { playComplete, playLevelUp } from './utils/sound'
 import { checkAchievements } from './utils/achievements'
+import { getStage } from './utils/stages'
 import './App.css'
 
 const createTodo = (text, difficulty, category) => ({
@@ -28,7 +29,8 @@ export default function App() {
   const [stats, setStats] = useLocalStorage('rpg-stats', { totalCompleted: 0, hardCompleted: 0 })
   const [unlockedAch, setUnlockedAch] = useLocalStorage('rpg-achievements', [])
   const [streak, setStreak] = useLocalStorage('rpg-streak', { count: 0, lastDate: '' })
-  const [levelUpMsg, setLevelUpMsg] = useState(null)
+  // levelUpInfo: { level, emoji, color, evolved, stageName } | null
+  const [levelUpInfo, setLevelUpInfo] = useState(null)
   const [achQueue, setAchQueue] = useState([])
 
   // Daily login streak
@@ -56,14 +58,22 @@ export default function App() {
     setTodos((prev) => [...prev, createTodo(text, difficulty, category)])
   }
 
+  const triggerLevelUp = (prevLevel, newLevel) => {
+    const prevStage = getStage(prevLevel)
+    const newStage  = getStage(newLevel)
+    const evolved   = newStage.stageIndex > prevStage.stageIndex
+    setLevelUpInfo({ level: newLevel, emoji: newStage.emoji, color: newStage.color, evolved, stageName: newStage.name })
+    setTimeout(() => setLevelUpInfo(null), evolved ? 4000 : 3000)
+  }
+
   const handleComplete = (id) => {
     const todo = todos.find((t) => t.id === id)
     if (!todo || todo.completed) return
 
     const xpGain = XP_REWARD[todo.difficulty]
     const prevLevel = calcLevel(totalXp).level
-    const newTotal = totalXp + xpGain
-    const newLevel = calcLevel(newTotal).level
+    const newTotal  = totalXp + xpGain
+    const newLevel  = calcLevel(newTotal).level
 
     setTodos((prev) => prev.map((t) => (t.id === id ? { ...t, completed: true } : t)))
     setTotalXp(newTotal)
@@ -77,8 +87,7 @@ export default function App() {
 
     if (newLevel > prevLevel) {
       playLevelUp()
-      setLevelUpMsg(`Level Up! Lv. ${newLevel} に到達！`)
-      setTimeout(() => setLevelUpMsg(null), 3000)
+      triggerLevelUp(prevLevel, newLevel)
     }
 
     const newUnlocks = checkAchievements(
@@ -103,13 +112,12 @@ export default function App() {
   // TODO: 確認後に削除する
   const handleDebugLevelUp = () => {
     const { level, xpInCurrentLevel } = calcLevel(totalXp)
-    const xpToAdd = xpToNextLevel(level) - xpInCurrentLevel
+    const xpToAdd  = xpToNextLevel(level) - xpInCurrentLevel
     const newTotal = totalXp + xpToAdd
     const newLevel = calcLevel(newTotal).level
     setTotalXp(newTotal)
     playLevelUp()
-    setLevelUpMsg(`Level Up! Lv. ${newLevel} に到達！`)
-    setTimeout(() => setLevelUpMsg(null), 3000)
+    triggerLevelUp(level, newLevel)
   }
 
   return (
@@ -122,10 +130,25 @@ export default function App() {
       <Hero level={calcLevel(totalXp).level} />
       <PlayerStatus totalXp={totalXp} onReset={handleReset} streak={streak.count} />
 
-      {levelUpMsg && (
-        <div className="levelup-toast" role="alert">
-          <img src="/levelup.png" alt="Level Up!" className="levelup-img" />
-          <div className="levelup-text">🎉 {levelUpMsg}</div>
+      {levelUpInfo && (
+        <div className={`levelup-toast ${levelUpInfo.evolved ? 'levelup-evolved' : ''}`} role="alert">
+          <div className="levelup-emoji" data-stage={getStage(levelUpInfo.level).stageIndex}>
+            {levelUpInfo.emoji}
+          </div>
+          <div className="levelup-body">
+            <div className="levelup-label">LEVEL UP!</div>
+            <div className="levelup-lv" style={{ color: levelUpInfo.color }}>
+              Lv. {levelUpInfo.level}
+            </div>
+            {levelUpInfo.evolved && (
+              <div className="levelup-evolved-name">✨ {levelUpInfo.stageName} に進化！</div>
+            )}
+          </div>
+          <div className="levelup-particles">
+            {[...Array(8)].map((_, i) => (
+              <span key={i} className="lp" style={{ '--i': i }} />
+            ))}
+          </div>
         </div>
       )}
 
