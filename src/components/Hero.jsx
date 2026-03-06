@@ -1,18 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
 
-// 左から順に Lv1, Lv3, Lv5, Lv10 の4分割スプライト
-const HEROES = [
-  { minLevel: 1,  spriteIndex: 0, name: 'ボロ布の旅人',   equip: 'ボロ布 ＋ 木の棒',     color: '#7070a0' },
-  { minLevel: 3,  spriteIndex: 1, name: '革装備の戦士',   equip: '革の鎧 ＋ 短剣',       color: '#c08030' },
-  { minLevel: 5,  spriteIndex: 2, name: '鉄剣の剣士',     equip: '鉄の剣 ＋ 鉄の盾',     color: '#5080e0' },
-  { minLevel: 10, spriteIndex: 3, name: 'マントの勇者',   equip: '聖剣 ＋ 魔法のマント', color: '#f0c040' },
+const STAGES = [
+  { minLevel: 1,  emoji: '🌱', name: 'ボロ布の旅人',    equip: '木の棒・ぼろぬの',              color: '#9090b0', stageIndex: 1 },
+  { minLevel: 5,  emoji: '🗡️', name: '駆け出し冒険者', equip: '短剣・革の鎧',                  color: '#c09040', stageIndex: 2 },
+  { minLevel: 10, emoji: '⚔️', name: '鉄の剣士',       equip: '鉄の剣・鉄の鎧',               color: '#4080e0', stageIndex: 3 },
+  { minLevel: 15, emoji: '🛡️', name: '銀の騎士',       equip: '銀の剣・フルプレートアーマー',   color: '#a0c8f8', stageIndex: 4 },
+  { minLevel: 20, emoji: '🔮', name: '魔法剣士',         equip: '魔法の剣・エンチャント鎧',       color: '#c050f0', stageIndex: 5 },
+  { minLevel: 30, emoji: '💫', name: '英雄',             equip: '聖剣・英雄の鎧',               color: '#f0c040', stageIndex: 6 },
+  { minLevel: 50, emoji: '👑', name: '伝説の勇者',       equip: '神話の剣・神の鎧',              color: '#ff6040', stageIndex: 7 },
 ]
 
 const getStage = (level) =>
-  [...HEROES].reverse().find((h) => level >= h.minLevel) ?? HEROES[0]
-
-// 4分割スプライトのX位置を計算 (0%, 33.33%, 66.67%, 100%)
-const spriteX = (index) => (index === 0 ? 0 : (index / (HEROES.length - 1)) * 100)
+  [...STAGES].reverse().find((s) => level >= s.minLevel) ?? STAGES[0]
 
 export const Hero = ({ level }) => {
   const [evolving, setEvolving] = useState(false)
@@ -20,9 +19,9 @@ export const Hero = ({ level }) => {
 
   useEffect(() => {
     const stage = getStage(level)
-    if (prevStageRef.current !== null && prevStageRef.current !== stage) {
+    if (prevStageRef.current !== null && prevStageRef.current.stageIndex !== stage.stageIndex) {
       setEvolving(true)
-      setTimeout(() => setEvolving(false), 1500)
+      setTimeout(() => setEvolving(false), 2000)
     }
     prevStageRef.current = stage
   }, [level])
@@ -33,14 +32,26 @@ export const Hero = ({ level }) => {
     <div className="hero-card">
       <div className={`hero-art-wrap ${evolving ? 'hero-evolving' : ''}`}>
         <div
-          className="hero-art"
-          style={{ backgroundPosition: `${spriteX(stage.spriteIndex)}% center` }}
+          className="hero-emoji"
+          data-stage={stage.stageIndex}
+          role="img"
           aria-label={stage.name}
-        />
+        >
+          {stage.emoji}
+        </div>
         {evolving && <span className="evolve-text">進化！</span>}
+        {evolving && <div className="evolve-ring" />}
       </div>
       <div className="hero-name" style={{ color: stage.color }}>{stage.name}</div>
       <div className="hero-equip">{stage.equip}</div>
+      <div className="hero-level-bar">
+        <span className="hero-lv-label">Lv.{level}</span>
+        {stage.stageIndex < STAGES.length && (
+          <span className="hero-next-label">
+            次の進化: Lv.{STAGES[stage.stageIndex]?.minLevel}
+          </span>
+        )}
+      </div>
     </div>
   )
 }

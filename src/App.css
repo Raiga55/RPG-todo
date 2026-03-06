@@ -268,23 +268,56 @@ body {
   position: relative;
   display: inline-flex;
   justify-content: center;
+  align-items: center;
   margin-bottom: 10px;
 }
 
-.hero-art {
-  display: block;
-  width: 128px;
-  height: 128px;
-  background-image: url('/hero.png');
-  background-size: 400% auto;   /* 4枚横並び */
-  background-repeat: no-repeat;
-  image-rendering: pixelated;   /* ドット絵をくっきり表示 */
-  filter: drop-shadow(0 0 14px rgba(240, 192, 64, 0.3));
-  transition: background-position 0.1s;
+/* ── Emoji character ── */
+.hero-emoji {
+  font-size: 5rem;
+  line-height: 1;
+  transition: filter 0.6s ease;
+  user-select: none;
 }
 
-.hero-evolving .hero-art {
-  animation: evolve-pulse 1.5s ease;
+/* Stage glow effects */
+.hero-emoji[data-stage="1"] {
+  filter: grayscale(40%) brightness(0.85);
+}
+.hero-emoji[data-stage="2"] {
+  filter: drop-shadow(0 0 8px #c09040aa);
+}
+.hero-emoji[data-stage="3"] {
+  filter: drop-shadow(0 0 12px #4080e0bb);
+}
+.hero-emoji[data-stage="4"] {
+  filter: drop-shadow(0 0 16px #a0c8f8cc) brightness(1.1);
+}
+.hero-emoji[data-stage="5"] {
+  filter: drop-shadow(0 0 20px #c050f0cc);
+  animation: hero-float 2.2s ease-in-out infinite;
+}
+.hero-emoji[data-stage="6"] {
+  filter: drop-shadow(0 0 24px #f0c040cc);
+  animation: hero-float 2.2s ease-in-out infinite, hero-glow-gold 1.6s ease-in-out alternate infinite;
+}
+.hero-emoji[data-stage="7"] {
+  filter: drop-shadow(0 0 28px #ff6040ee);
+  animation: hero-float 2.2s ease-in-out infinite, hero-rainbow 4s linear infinite;
+}
+
+.hero-evolving .hero-emoji {
+  animation: evolve-pulse 2s ease !important;
+}
+
+/* Evolve ring flash */
+.evolve-ring {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  border: 3px solid #f0c040;
+  animation: evolve-ring 2s ease forwards;
+  pointer-events: none;
 }
 
 .evolve-text {
@@ -314,13 +347,27 @@ body {
 .hero-equip {
   font-size: 0.8rem;
   color: var(--muted);
+  margin-bottom: 8px;
 }
+
+.hero-level-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--muted);
+  width: 100%;
+  max-width: 280px;
+  margin: 4px auto 0;
+}
+
+.hero-lv-label { color: var(--text); font-weight: 700; }
 
 @keyframes evolve-pulse {
   0%   { transform: scale(1); }
-  20%  { transform: scale(1.35) rotate(-6deg); }
-  45%  { transform: scale(1.25) rotate(5deg); }
-  70%  { transform: scale(1.3) rotate(-3deg); }
+  15%  { transform: scale(1.6) rotate(-8deg); }
+  35%  { transform: scale(1.45) rotate(6deg); }
+  55%  { transform: scale(1.55) rotate(-4deg); }
+  80%  { transform: scale(1.2); }
   100% { transform: scale(1); }
 }
 
@@ -329,6 +376,30 @@ body {
   20%  { opacity: 1; transform: translateX(-50%) translateY(-12px); }
   70%  { opacity: 1; transform: translateX(-50%) translateY(-18px); }
   100% { opacity: 0; transform: translateX(-50%) translateY(-34px); }
+}
+
+@keyframes evolve-ring {
+  0%   { transform: scale(0.6); opacity: 0; }
+  30%  { opacity: 1; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+@keyframes hero-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes hero-glow-gold {
+  from { filter: drop-shadow(0 0 20px #f0c040bb); }
+  to   { filter: drop-shadow(0 0 36px #f0c040ff) brightness(1.15); }
+}
+
+@keyframes hero-rainbow {
+  0%   { filter: drop-shadow(0 0 28px #ff6040ee); }
+  25%  { filter: drop-shadow(0 0 28px #f0c040ee); }
+  50%  { filter: drop-shadow(0 0 28px #40c0ffee); }
+  75%  { filter: drop-shadow(0 0 28px #c050f0ee); }
+  100% { filter: drop-shadow(0 0 28px #ff6040ee); }
 }
 
 /* ── Level-up Toast ── */
