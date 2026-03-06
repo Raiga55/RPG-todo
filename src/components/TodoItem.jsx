@@ -2,10 +2,14 @@ import { XP_REWARD } from '../utils/rpg'
 
 const DIFFICULTY_LABEL = { easy: '易', normal: '普', hard: '難' }
 const DIFFICULTY_CLASS = { easy: 'diff-easy', normal: 'diff-normal', hard: 'diff-hard' }
+const CATEGORY_EMOJI = { work: '💼', study: '📚', life: '🏠', hobby: '🎮', other: '⚡' }
 
 export const TodoItem = ({ todo, onComplete, onDelete }) => {
+  const catEmoji = CATEGORY_EMOJI[todo.category] ?? '⚡'
+
   return (
     <li className={`todo-item ${todo.completed ? 'completed' : ''}`}>
+      <span className="cat-emoji" title={todo.category}>{catEmoji}</span>
       <span className={`diff-tag ${DIFFICULTY_CLASS[todo.difficulty]}`}>
         {DIFFICULTY_LABEL[todo.difficulty]}
       </span>

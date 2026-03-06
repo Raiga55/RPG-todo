@@ -365,3 +365,118 @@ body {
   80%  { opacity: 1; }
   100% { opacity: 0; }
 }
+
+/* ── Streak ── */
+.streak-badge {
+  font-size: .8rem;
+  font-weight: 700;
+  color: #ff8040;
+  letter-spacing: .03em;
+}
+
+/* ── Category emoji ── */
+.cat-emoji {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* ── Achievement Toast ── */
+.achievement-toast {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, #1a1a2e, #2a1a3a);
+  border: 1px solid #9040c0;
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  animation: slideIn 3.5s ease forwards;
+  box-shadow: 0 0 20px #6020a040;
+}
+
+.ach-icon { font-size: 2rem; flex-shrink: 0; }
+
+.ach-info { display: flex; flex-direction: column; gap: 2px; }
+
+.ach-unlocked {
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #b060e0;
+}
+
+.ach-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.ach-desc {
+  font-size: .78rem;
+  color: var(--muted);
+}
+
+@keyframes slideIn {
+  0%   { opacity: 0; transform: translateX(40px); }
+  12%  { opacity: 1; transform: translateX(0); }
+  75%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── Achievements Panel ── */
+.achievements-panel {
+  margin-top: 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.achievements-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: .9rem;
+  font-weight: 700;
+  padding: 14px 18px;
+  cursor: pointer;
+  text-align: left;
+}
+.achievements-toggle:hover { background: #ffffff08; }
+
+.ach-count {
+  font-size: .8rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.ach-chevron { margin-left: auto; color: var(--muted); font-size: .75rem; }
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
+.ach-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 6px 10px;
+  text-align: center;
+  transition: border-color .2s;
+}
+.ach-card.unlocked { border-color: #6030a0; }
+.ach-card.locked   { opacity: .45; }
+
+.ach-card-icon  { font-size: 1.6rem; }
+.ach-card-title { font-size: .68rem; color: var(--muted); line-height: 1.3; }
